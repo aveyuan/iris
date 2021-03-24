@@ -987,6 +987,32 @@ func (app *Application) Run(serve Runner, withOrWithout ...Configurator) error {
 	return err
 }
 
+// RunIgTepmCheck Ignore template error checking
+func (app *Application) RunIgTepmCheck(serve Runner, withOrWithout ...Configurator) error {
+	// first Build because it doesn't need anything from configuration,
+	// this gives the user the chance to modify the router inside a configurator as well.
+	if err := app.Build(); err != nil {
+		rp := errgroup.New("Application Builder")
+		if err != rp.Group("View Builder").Err(err) {
+			app.logger.Error(err)
+			return err
+		}
+	}
+
+	app.Configure(withOrWithout...)
+	app.tryStartTunneling()
+
+	app.logger.Debugf("Application: running using %d host(s)", len(app.Hosts)+1)
+
+	// this will block until an error(unless supervisor's DeferFlow called from a Task).
+	err := serve(app)
+	if err != nil {
+		app.Logger().Error(err)
+	}
+
+	return err
+}
+
 // tryInjectLiveReload tries to check if this application
 // runs under https://github.com/kataras/iris-cli and if so
 // then it checks if the livereload is enabled and then injects
