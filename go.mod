@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/CloudyKit/jet/v6 v6.1.0
+	github.com/Joker/hpp v1.0.0 // indirect
 	github.com/Shopify/goreferrer v0.0.0-20210630161223-536fa16abd6f
 	github.com/andybalholm/brotli v1.0.3
 	github.com/aymerick/raymond v2.0.3-0.20180322193309-b565731e1464+incompatible
@@ -29,12 +30,16 @@ require (
 	github.com/kataras/tunnel v0.0.2
 	github.com/klauspost/compress v1.13.1
 	github.com/mailru/easyjson v0.7.7
+	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.15
+	github.com/nats-io/nats-server/v2 v2.3.2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/schollz/closestmatch v2.1.0+incompatible
+	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/tdewolff/minify/v2 v2.9.19
 	github.com/vmihailenco/msgpack/v5 v5.3.4
 	github.com/yosssi/ace v0.0.5
+	github.com/yudai/pp v2.0.1+incompatible // indirect
 	go.etcd.io/bbolt v1.3.6
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	golang.org/x/net v0.0.0-20210716203947-853a461950ff

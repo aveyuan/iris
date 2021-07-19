@@ -611,7 +611,7 @@ func (app *Application) Build() error {
 		// app.view.AddFunc("url", rv.URL)
 		if err := app.view.Load(); err != nil {
 			app.logger.Errorf("View Builder: %v", err)
-			return err
+			// return err
 		}
 	}
 
