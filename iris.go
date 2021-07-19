@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/kataras/iris/v12/context"
+	"github.com/kataras/iris/v12/core/errgroup"
 	"github.com/kataras/iris/v12/core/host"
 	"github.com/kataras/iris/v12/core/netutil"
 	"github.com/kataras/iris/v12/core/router"
@@ -889,6 +890,38 @@ func (app *Application) Run(serve Runner, withOrWithout ...Configurator) error {
 	if err := app.Build(); err != nil {
 		app.logger.Error(err)
 		return err
+	}
+
+	app.ConfigureHost(func(host *Supervisor) {
+		host.SocketSharding = app.config.SocketSharding
+		host.KeepAlive = app.config.KeepAlive
+	})
+
+	app.tryStartTunneling()
+
+	if len(app.Hosts) > 0 {
+		app.logger.Debugf("Application: running using %d host(s)", len(app.Hosts)+1 /* +1 the current */)
+	}
+
+	// this will block until an error(unless supervisor's DeferFlow called from a Task).
+	err := serve(app)
+	if err != nil {
+		app.logger.Error(err)
+	}
+
+	return err
+}
+
+// RunIgTepmCheck Ignore template error checking
+func (app *Application) RunIgTepmCheck(serve Runner, withOrWithout ...Configurator) error {
+	app.Configure(withOrWithout...)
+
+	if err := app.Build(); err != nil {
+		rp := errgroup.New("Application Builder")
+		if err != rp.Group("View Builder").Err(err) {
+			app.logger.Error(err)
+			return err
+		}
 	}
 
 	app.ConfigureHost(func(host *Supervisor) {
